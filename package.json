@@ -1,19 +1,19 @@
 {
-    "name":             "inlet",
+    "name":             "rolling",
     "version":          "0.2.1",
     "author":           "Alan Gutierrez <alan@prettyrobots.com>",
-    "description":      "A micro-framework for HTTP end points.",
+    "description":      "Rolling averages at multiple intervals.",
     "keywords":
     [
-                        "http", "https", "rest", "json", "curl"
+                        "average", "rolling", "moving", "stats"
     ],
     "contributors":     [],
-    "homepage":         "https://github.com/bigeasy/inlet",
-    "bugs":             "https://github.com/bigeasy/inlet/issues",
+    "homepage":         "https://github.com/bigeasy/rolling",
+    "bugs":             "https://github.com/bigeasy/rolling/issues",
     "repository":
     {
                         "type": "git",
-                        "url": "http://github.com/bigeasy/inlet.git"
+                        "url": "http://github.com/bigeasy/rolling.git"
     },
     "dependencies":
     {
