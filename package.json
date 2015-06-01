@@ -8,12 +8,12 @@
                         "average", "rolling", "moving", "stats"
     ],
     "contributors":     [],
-    "homepage":         "https://github.com/bigeasy/rolling",
-    "bugs":             "https://github.com/bigeasy/rolling/issues",
+    "homepage":         "https://github.com/bigeasy/assessment",
+    "bugs":             "https://github.com/bigeasy/assessment/issues",
     "repository":
     {
                         "type": "git",
-                        "url": "http://github.com/bigeasy/rolling.git"
+                        "url": "http://github.com/bigeasy/assessment.git"
     },
     "dependencies":
     {
