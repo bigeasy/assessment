@@ -1,6 +1,6 @@
 {
     "name":             "assessment",
-    "version":          "0.2.1",
+    "version":          "0.0.0",
     "author":           "Alan Gutierrez <alan@prettyrobots.com>",
     "description":      "Rolling averages at multiple intervals.",
     "keywords":
