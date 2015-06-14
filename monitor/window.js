@@ -23,6 +23,7 @@ Window.prototype.sample = function (value) {
 
 
 Window.prototype.__defineGetter__('stats', function () {
+    var value
     while (this.clock() - this.head.previous.when > this.duration)  {
         value = this.head.previous.value
         this.head.previous = this.head.previous.previous
