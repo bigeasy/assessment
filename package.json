@@ -10,6 +10,7 @@
     "contributors":     [],
     "homepage":         "https://github.com/bigeasy/assessment",
     "bugs":             "https://github.com/bigeasy/assessment/issues",
+    "main":             "assessment",
     "repository":
     {
                         "type": "git",

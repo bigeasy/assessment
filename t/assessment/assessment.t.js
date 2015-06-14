@@ -1,7 +1,7 @@
 require('proof')(3, prove)
 
 function prove (assert) {
-    var Window = require('../../monitor/window')
+    var Window = require('../..')
     var time = 1
     var metric = new Window(6000, function () { return time ++ })
     assert(metric.stats,  null , 'stats')
