@@ -1,15 +1,16 @@
 require('proof')(3, prove)
 
 function prove (assert) {
-    var Window = require('../..')
+    var Assessment = require('../..')
+    new Assessment().sample(0)
     var time = 1
-    var metric = new Window(6000, function () { return time ++ })
-    assert(metric.stats,  null , 'stats')
-    metric.sample(1)
-    metric.sample(2)
-    metric.sample(3)
-    assert(metric.stats, { average: 2 }, 'stats')
+    var assessment = new Assessment({ intervals: [ 6000 ], clock: function () { return time ++ } })
+    assert(assessment.calculate(),  { '6000': { average: null } }, 'null')
+    assessment.sample(1)
+    assessment.sample(2)
+    assessment.sample(3)
+    assert(assessment.calculate(), { '6000': { average: 2 } }, 'calculate')
     time = 6002
-    metric.sample(4)
-    assert(metric.stats, { average: 4 }, 'stats')
+    assessment.sample(4)
+    assert(assessment.calculate(), { '6000': { average: 3 } }, 'shift')
 }
