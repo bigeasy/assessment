@@ -11,6 +11,7 @@
     "homepage":         "https://github.com/bigeasy/assessment",
     "bugs":             "https://github.com/bigeasy/assessment/issues",
     "main":             "assessment",
+    "license":          "MIT",
     "repository":
     {
                         "type": "git",

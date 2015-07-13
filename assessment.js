@@ -1,4 +1,3 @@
-
 function Window (duration, clock) {
     this.clock = clock || function () { return Date.now() }
     this.duration = duration
