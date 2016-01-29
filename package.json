@@ -19,6 +19,7 @@
     },
     "dependencies":
     {
+                        "bintrees":             "1.0.1"
     },
     "devDependencies":
     {
