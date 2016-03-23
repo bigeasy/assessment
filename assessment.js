@@ -14,6 +14,7 @@ function Window (interval, options) {
     this.sum = 0
     this.head = { head: true, value: null }
     this.head.next = this.head.previous = this.head
+    this.median = null
 }
 
 Window.prototype.sample = function (value) {
@@ -29,9 +30,27 @@ Window.prototype.sample = function (value) {
     node.previous.next = node
     node.next.previous = node
     this.tree.insert(node)
+    if (this.count == 1) {
+        this.median = node
+    } else {
+        var odd = this.count % 2 == 0 // before addition
+        var distance = compare(node, this.median)
+        if (odd && distance < 0) {
+            this.median = this.tree.findIter(this.median).prev()
+        } else if (!odd && distance > 0) {
+            this.median = this.tree.findIter(this.median).next()
+        }
+    }
     var node
     while (node.when - this.head.previous.when > this.interval)  {
         node = this.head.previous
+        var odd = this.count % 2 == 1
+        var distance = compare(node, this.median)
+        if (odd && distance >= 0) {
+            this.median = this.tree.findIter(this.median).prev()
+        } else if (!odd && distance <= 0) {
+            this.median = this.tree.findIter(this.median).next()
+        }
         this.head.previous = node.previous
         this.head.previous.next = this.head
         this.count--
@@ -45,12 +64,14 @@ Window.prototype.summarize = function () {
     if (this.count == 0) {
         return {
             mean: this.empty,
+            median: this.empty,
             min: this.empty,
             max: this.empty
         }
     } else {
         return {
             mean: this.sum / this.count,
+            median: this.median.value,
             min: this.tree.min().value,
             max: this.tree.max().value
         }
