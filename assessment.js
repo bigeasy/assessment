@@ -18,6 +18,24 @@ function Window (interval, options) {
     this.median = null
 }
 
+Window.prototype.dump = function (message, node) {
+    var median = this.median ? {
+        when: this.median.when,
+        value: this.median.value,
+        index: this.median.index
+    } : null
+    logger.error(message, {
+        median: median,
+        node: {
+            when: node.when,
+            value: node.value,
+            index: node.index
+        },
+        count: this.count,
+        index: this.index
+    })
+}
+
 Window.prototype.sample = function (value) {
     this.count++
     this.sum += value
@@ -43,21 +61,7 @@ Window.prototype.sample = function (value) {
                 this.median = this.tree.findIter(this.median).next()
             }
         } catch (e) {
-            var median = this.median ? {
-                when: this.median.when,
-                value: this.median.value,
-                index: this.median.index
-            } : null
-            logger.error('window.median', {
-                median: median,
-                node: {
-                    when: node.when,
-                    value: node.value,
-                    index: node.index
-                },
-                count: this.count,
-                index: this.index
-            })
+            this.dump('window.median', node)
             throw e
         }
     }
@@ -77,21 +81,7 @@ Window.prototype.sample = function (value) {
         this.sum -= node.value
         this.tree.remove(node)
         if (this.tree.find(this.median) == null) {
-            var median = this.median ? {
-                when: this.median.when,
-                value: this.median.value,
-                index: this.median.index
-            } : null
-            logger.error('window.remove', {
-                median: median,
-                node: {
-                    when: node.when,
-                    value: node.value,
-                    index: node.index
-                },
-                count: this.count,
-                index: this.index
-            })
+            this.dump('window.remove', node)
         }
     }
 }
