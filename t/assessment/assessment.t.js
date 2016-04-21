@@ -31,4 +31,14 @@ function prove (assert) {
     }, 'median remove even')
     time = 18004
     assessment.sample(0)
+    assessment.sample(6)
+    assessment.sample(5)
+    assessment.sample(4)
+    assessment.sample(3)
+    assessment.sample(2)
+    assessment.sample(1)
+    while (assessment.windows[0].tree.size > 2) {
+        assessment.windows[0].tree.remove(assessment.windows[0].tree.min())
+    }
+    assessment.sample(0)
 }

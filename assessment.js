@@ -55,7 +55,7 @@ Window.prototype.sample = function (value) {
                     value: node.value,
                     index: node.index
                 },
-                count: count,
+                count: this.count,
                 index: this.index
             })
             throw e
@@ -89,7 +89,7 @@ Window.prototype.sample = function (value) {
                     value: node.value,
                     index: node.index
                 },
-                count: count,
+                count: this.count,
                 index: this.index
             })
         }
