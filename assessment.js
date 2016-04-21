@@ -1,4 +1,5 @@
 var RBTree = require('bintrees').RBTree
+var logger = require('prolific').createLogger('bigeasy.assessment')
 
 function compare (a, b) {
     return a.value - b.value || a.index - b.index
@@ -35,10 +36,29 @@ Window.prototype.sample = function (value) {
     } else {
         var odd = this.count % 2 == 0 // before addition
         var distance = compare(node, this.median)
-        if (odd && distance < 0) {
-            this.median = this.tree.findIter(this.median).prev()
-        } else if (!odd && distance > 0) {
-            this.median = this.tree.findIter(this.median).next()
+        try {
+            if (odd && distance < 0) {
+                this.median = this.tree.findIter(this.median).prev()
+            } else if (!odd && distance > 0) {
+                this.median = this.tree.findIter(this.median).next()
+            }
+        } catch (e) {
+            var median = this.median ? {
+                when: this.median.when,
+                value: this.median.value,
+                index: this.median.index
+            } : null
+            logger.error('window.median', {
+                median: median,
+                node: {
+                    when: node.when,
+                    value: node.value,
+                    index: node.index
+                },
+                count: count,
+                index: this.index
+            })
+            throw e
         }
     }
     var node
@@ -56,6 +76,23 @@ Window.prototype.sample = function (value) {
         this.count--
         this.sum -= node.value
         this.tree.remove(node)
+        if (this.tree.find(this.median) == null) {
+            var median = this.median ? {
+                when: this.median.when,
+                value: this.median.value,
+                index: this.median.index
+            } : null
+            logger.error('window.remove', {
+                median: median,
+                node: {
+                    when: node.when,
+                    value: node.value,
+                    index: node.index
+                },
+                count: count,
+                index: this.index
+            })
+        }
     }
 }
 
@@ -79,17 +116,29 @@ Window.prototype.summarize = function () {
 }
 
 function Assessment (options) {
+    logger.info('construct')
     options || (options = {})
-    this.windows = (options.intervals || [ 60000 ]).map(function (interval) {
+    this.options = options || options || {}
+    this.options.intervals = options.intervals || [ 60000 ]
+    this.initialize()
+}
+
+Assessment.prototype.initialize = function () {
+    var options = this.options
+    this.windows = this.options.intervals.map(function (interval) {
         return new Window(interval, options)
     })
-
 }
 
 Assessment.prototype.sample = function (value) {
-    var windows = this.windows
-    for (var i = 0, I = windows.length; i < I; i++) {
-        windows[i].sample(value)
+    try {
+        var windows = this.windows
+        for (var i = 0, I = windows.length; i < I; i++) {
+            windows[i].sample(value)
+        }
+    } catch (e) {
+        logger.error('assessment.sample', { stack: e.stack })
+        this.initialize()
     }
 }
 
