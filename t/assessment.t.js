@@ -1,7 +1,7 @@
 require('proof')(5, prove)
 
 function prove (assert) {
-    var Assessment = require('../..')
+    var Assessment = require('..')
     new Assessment().sample(0)
     var time = 1
     var assessment = new Assessment({
