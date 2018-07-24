@@ -15,7 +15,7 @@
     "repository":
     {
                         "type": "git",
-                        "url": "http://github.com/bigeasy/assessment.git"
+                        "url": "bigeasy/assessment"
     },
     "dependencies":
     {
