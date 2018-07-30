@@ -37,8 +37,4 @@ function prove (okay) {
     assessment.sample(3)
     assessment.sample(2)
     assessment.sample(1)
-    while (assessment.windows[0].tree.size > 2) {
-        assessment.windows[0].tree.remove(assessment.windows[0].tree.min())
-    }
-    assessment.sample(0)
 }

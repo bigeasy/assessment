@@ -1,5 +1,4 @@
 var RBTree = require('bintrees').RBTree
-var logger = require('prolific').createLogger('bigeasy.assessment')
 
 function compare (a, b) {
     return a.value - b.value || a.index - b.index
@@ -16,24 +15,6 @@ function Window (interval, options) {
     this.head = { head: true, value: null }
     this.head.next = this.head.previous = this.head
     this.median = null
-}
-
-Window.prototype.dump = function (message, node) {
-    var median = this.median ? {
-        when: this.median.when,
-        value: this.median.value,
-        index: this.median.index
-    } : null
-    logger.error(message, {
-        median: median,
-        node: {
-            when: node.when,
-            value: node.value,
-            index: node.index
-        },
-        count: this.count,
-        index: this.index
-    })
 }
 
 Window.prototype.sample = function (value) {
@@ -54,15 +35,10 @@ Window.prototype.sample = function (value) {
     } else {
         var odd = this.count % 2 == 0 // before addition
         var distance = compare(node, this.median)
-        try {
-            if (odd && distance < 0) {
-                this.median = this.tree.findIter(this.median).prev()
-            } else if (!odd && distance > 0) {
-                this.median = this.tree.findIter(this.median).next()
-            }
-        } catch (e) {
-            this.dump('window.median', node)
-            throw e
+        if (odd && distance < 0) {
+            this.median = this.tree.findIter(this.median).prev()
+        } else if (!odd && distance > 0) {
+            this.median = this.tree.findIter(this.median).next()
         }
     }
     var node
@@ -80,9 +56,6 @@ Window.prototype.sample = function (value) {
         this.count--
         this.sum -= node.value
         this.tree.remove(node)
-        if (this.tree.find(this.median) == null) {
-            this.dump('window.remove', node)
-        }
     }
 }
 
@@ -106,9 +79,8 @@ Window.prototype.summarize = function () {
 }
 
 function Assessment (options) {
-    logger.info('construct')
     options || (options = {})
-    this.options = options || options || {}
+    this.options = options
     this.options.intervals = options.intervals || [ 60000 ]
     this.initialize()
 }
@@ -121,14 +93,9 @@ Assessment.prototype.initialize = function () {
 }
 
 Assessment.prototype.sample = function (value) {
-    try {
-        var windows = this.windows
-        for (var i = 0, I = windows.length; i < I; i++) {
-            windows[i].sample(value)
-        }
-    } catch (e) {
-        logger.error('assessment.sample', { stack: e.stack })
-        this.initialize()
+    var windows = this.windows
+    for (var i = 0, I = windows.length; i < I; i++) {
+        windows[i].sample(value)
     }
 }
 
