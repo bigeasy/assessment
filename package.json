@@ -19,7 +19,6 @@
     },
     "dependencies":
     {
-                        "prolific":             "1.x",
                         "bintrees":             "1.0.1"
     },
     "devDependencies":
